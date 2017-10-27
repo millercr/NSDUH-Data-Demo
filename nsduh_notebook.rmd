@@ -11,16 +11,63 @@ knitr::opts_chunk$set(echo = TRUE, comment = "", fig.width=8.4)
 
 ##Description of Data
 
-TO BE COMPLETED
-TABLE OF VARIABLES 
+Data for this demo comes from the 2015 National Survey on Drug Use and Health (NSDUH). For more information on NSDUH and these data visit the [Substance Abuse & Mental Health Data Archive](https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf). All 2015 data were downloaded and subsetted to only include **women** with **select variables** outlined below. The purpose of this demo is to display some of the functionality of R and how to begin working with and inspecting data. 
+
+|Variable Name| Definition
+|-------------|-----------
+|QUESTID2|Respondent ID
+|preg| Pregnancy status
+|depndalc| Alcohol Dependence - Past Year
+|depndmrj| Marijuana Dependence - Past Year
+|depndcoc| Cocaine Dependence - Past Year
+|depndher| Heroin Dependence - Past Year
+|depndpyhal| Hallucinogen Dependence - Past Year
+|depndpyinh| Inhalant Dependence - Past Year
+|depndpymth| Methamphetamine Dependence - Past Year
+|depndpypnr| Pain Reliever Dependence - Past Year
+|depndpytrq| Tranquilizer Dependence - Past Year
+|depndpystm| Stimulant Dependence - Past Year
+|depndpysed| Sedative Dependence - Past Year
+|depndpypsy| Psychotherapeutic Dependence - Past Year
+|depndpyill| Illicit Drug Dependence - Past Year
+|depndpyiem| Illicit Drug Dependence Other Than Marijuana - Past Year
+|abusealc| Alcohol Abuse - Past Year
+|abusemrj| Marijuana Abuse - Past Year
+|abusecoc| Cocaine Abuse - Past Year
+|abuseher| Heroin Abuse - Past Year
+|abusepyhal| Hallucinogen Abuse - Past Year
+|abusepyinh| Inhalant Abuse - Past Year
+|abusepymth| Methamphetamine Abuse - Past Year
+|abusepypnr| Pain Reliever Abuse - Past Year
+|abusepytrq| Tranquilizer Abuse - Past Year
+|abusepystm| Stimulant Abuse - Past Year
+|abusepysed| Sedative Abuse - Past Year
+|abusepypsy| Psychotherapeutic Abuse - Past Year
+|abusepyill| Illicit Drug Abuse - Past Year
+|abusepyiem| Illicit Drug Abuse Other Than Marijuana - Past Year
+|irmcdchp| Imputation Revised Medicaid/CHIP Status
+|NEWRACE2| Race|
+|eduhighcat| Education Level
+|irwkstat| Imputation Revised Employment Status
+|income| Income
+|sexident| Sexual Identity
+|amdeyr| Adult Major Depressive Episode - Past Year
+|ymdeyr| Youth Major Depressive Episode - Past Year
+|AGE2| Age Categorical
+|CATAG6| Age Categorical - 6 levels
 
 ## Load Data
+
+The first thing we want to do is load the R data into the Global Environment. We use the `load()` function to bring in the R file type .rda. 
 
 ```{r, warning=FALSE, message=FALSE}
 load("nsduh_female_dat_2015.rda")
 ```
 
 ## Examine Structure and Variables 
+
+Once we have the data file in the Global Environment, we want to begin examining the structure. That is, how many observations and variables are in our data? What types of variables are we working with? As is almost always the case in R, there are several ways to begin answering these questions. The `str` and `glimpse` functions allow you to examine your variables and take a quick look at the first few observations. The `dim` function provides the number of rows/observations and columns/variables. 
+
 
 ```{r, warning=FALSE, message=FALSE}
 #Structure
@@ -36,6 +83,9 @@ dim(fem.d)
 
 
 ##Clean Variables
+
+When we review our variables, it's often the case that we want redefine/recode the variables in which we will be working. For example, in our data set, all variables were brought in as integers which we will want to recode into categorical or factor variables in R. The following code provides a few techniques for accomplishing this task. 
+
 
 ```{r}
 
@@ -105,6 +155,8 @@ fem.d$sexident.f <- droplevels(fem.d$sexident.f)
 
 #Visually Inspect Data 
 
+After recoding variables, I like to take a quick look at the data set. R in combination with Markdown and `knitr` have some options for visually inspecting these data. In this case, I've used the `DT` package to produce an interactive table for spot checking data. Obvisouly, when data sets are large, like this one, visually inspecting data is not a good strategy for detecting errors as there are too many observations to manually review. However, I like to just take a quick look to see if things appear as expected. 
+
 ```{r, warning=FALSE, message=FALSE}
 #install.packages("DT")
 library(DT)
@@ -162,5 +214,24 @@ depnd.fig <- ggplot(data = depnd.d, aes(x = reorder(sub, -n), y=n)) +
   geom_bar(stat="identity")
 
 depnd.fig
+```
 
+
+###Abuse
+
+```{r, warning=FALSE, message=FALSE}
+abuse.d <- fem.d %>%
+  select(QUESTID2, starts_with("abuse")) %>%
+  gather("substance","value", 2:15) %>%
+  mutate(sub = substring(substance, 6)) %>%
+  filter(value == "Yes") %>%
+  group_by(sub) %>%
+  tally() %>%
+  arrange(desc(n))
+  
+
+abuse.fig <- ggplot(data = abuse.d, aes(x = reorder(sub, -n), y=n)) +
+  geom_bar(stat="identity", fill="steelblue")
+
+abuse.fig
 ```
