@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment = "", fig.width=8.4)
+knitr::opts_chunk$set(echo = TRUE, comment = NA, fig.width=8.4)
 ```
 
 ## Description of Data

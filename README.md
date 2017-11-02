@@ -6,7 +6,7 @@ output: md_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment = "", fig.width=8.4)
+knitr::opts_chunk$set(echo = TRUE, comment = NA, fig.width=8.4)
 ```
 
 ## Packages Utilized in this Demo 
