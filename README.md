@@ -9,7 +9,17 @@ output: md_document
 knitr::opts_chunk$set(echo = TRUE, comment = "", fig.width=8.4)
 ```
 
-##Description of Data
+## Packages Utilized in this Demo 
+`ggplot2`
+`descr`
+`Rcpp`
+`DT`
+`stringr`
+`dplyr`
+`tidyr`
+
+
+## Description of Data
 
 Data for this demo comes from the 2015 National Survey on Drug Use and Health (NSDUH). For more information on NSDUH and these data visit the [Substance Abuse & Mental Health Data Archive](https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf). All 2015 data were downloaded and subsetted to only include **women** with **select variables** outlined below. The purpose of this demo is to display some of the functionality of R and how to begin working with and inspecting data. 
 
@@ -82,7 +92,7 @@ dim(fem.d)
 ```
 
 
-##Clean Variables
+## Clean Variables
 
 When we review our variables, it's often the case that we want redefine/recode the variables in which we will be working. For example, in our data set, all variables were brought in as integers which we will want to recode into categorical or factor variables in R. The following code provides a few techniques for accomplishing this task. 
 
@@ -153,7 +163,7 @@ fem.d$sexident.f[fem.d$sexident.f == "NA"] <- NA
 fem.d$sexident.f <- droplevels(fem.d$sexident.f)
 ```
 
-#Visually Inspect Data 
+## Visually Inspect Data 
 
 After recoding variables, I like to take a quick look at the data set. R in combination with Markdown and `knitr` have some options for visually inspecting these data. In this case, I've used the `DT` package to produce an interactive table for spot checking data. Obvisouly, when data sets are large, like this one, visually inspecting data is not a good strategy for detecting errors as there are too many observations to manually review. However, I like to just take a quick look to see if things appear as expected. 
 
@@ -165,12 +175,12 @@ library(DT)
 datatable(fem.d[1:50, ])
 ```
 
-#Descriptive Statistics
+## Descriptive Statistics
 
 All of the variables we're using in this demonstraction are factor/categorical, so we will be using numbers and percentages for our descriptive statistics. The `descr` package offers a nice function to obtain a frequency table and bar plot of each variable. Below I use the `freq` function to look at a number of demographic variables. Because we're running this function on multiple variables, you might think about writing a loop to save some time. 
 
 
-##Frequencies
+## Frequencies
 ```{r, warning=FALSE, message=FALSE}
 #Age distribtution
 library(descr)
@@ -186,7 +196,7 @@ freq(fem.d$sexident.f)
 
 ```
 
-##Crosstabs
+## Crosstabs
 
 In addition to looking at each variable independently, we probably also want to look at relationships among variables. With categorical variables, we can do this with a contingecy table or crosstab. Below are a couple of examples of contingency tables displaying relationships between race and alcohol dependence and sexual identity and alcohol dependence.   
 
@@ -198,7 +208,7 @@ pander(x)
 pander(y)
 ```
 
-##Transform for Visualizing Drug Dependence and Drug Abuse Variables
+## Transform for Visualizing Drug Dependence and Drug Abuse Variables
 
 Although looking at frequencies and crosstabs can be helpful in understanding the data set we're working with, often visualizing data is an easier and quicker way to get a good picture of these data. However, data sometimes needs to be transformed before we can build helpful figures. For example, a bar graph depicting the frequency of dependence by substance is a quick way to understand the distribution. However, before we can do that, we need to get our data into a structure that will allow us to build this kind of plot. To do this, we will use the `tidyr` and `ggplot2` packages. Below are the steps used to transform these data.
 
@@ -211,7 +221,7 @@ Although looking at frequencies and crosstabs can be helpful in understanding th
 7. Sort the data from largest to smallest (descendingly)
 
 
-###Dependence
+### Dependence
 
 ```{r, warning=FALSE, message=FALSE}
 library(tidyr)
@@ -240,7 +250,7 @@ depnd.fig
 ```
 
 
-###Abuse
+### Abuse
 
 ```{r, warning=FALSE, message=FALSE}
 abuse.d <- fem.d %>%
