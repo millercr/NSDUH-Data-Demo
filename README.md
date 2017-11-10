@@ -213,7 +213,7 @@ pander(y)
 Although looking at frequencies and crosstabs can be helpful in understanding the data set we're working with, often visualizing data is an easier and quicker way to get a good picture of these data. However, data sometimes needs to be transformed before we can build helpful figures. For example, a bar graph depicting the frequency of dependence by substance is a quick way to understand the distribution. However, before we can do that, we need to get our data into a structure that will allow us to build this kind of plot. To do this, we will use the `tidyr` and `ggplot2` packages. Below are the steps used to transform these data.
 
 1. Select the variables we will use to make the plot (including and identifier)
-2. Turn a range of variables into one variable with unique key pair values using `gather`
+2. Turn a range of variables into one variable with unique key value pairs using `gather`
 3. Create a new varible called `sub` that will be the abbreviated substance label getting rid of the first 5 characters of the variable "substance" using `substring`
 4. Include only respondents with a positive ("Yes") response
 5. Group the data by the new `sub` variable 
